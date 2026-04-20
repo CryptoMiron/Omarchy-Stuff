@@ -1,0 +1,3 @@
+dist/bin/elephant
+dist/plugins/*.so
+vendor/elephant/
