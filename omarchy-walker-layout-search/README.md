@@ -19,6 +19,14 @@ firefox  →  firefox (en) + ашкуащч (ru)  →  Firefox найден
 ашкуащч  →  ашкуащч (ru) + firefox (en)  →  Firefox найден
 ```
 
+### Пример в интерфейсе Walker
+
+Ниже живой пример того, как это выглядит в самом Walker:
+
+<p align="center">
+  <img src="./walker.png" alt="Пример поиска в Walker с поддержкой EN и RU раскладок" />
+</p>
+
 ### Как это работает
 
 Патч заменяет функцию `calcScore()` в провайдере `desktopapplications`. При каждом запросе:
