@@ -5,3 +5,9 @@
 .beads-credential-key
 .beads/
 .worktrees/
+
+# Agent configs
+.claude/
+AGENTS.md
+CLAUDE.md
+GEMINI.md
