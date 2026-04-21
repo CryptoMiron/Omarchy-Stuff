@@ -1,74 +1,74 @@
 # Omarchy Waybar Brightness
 
-Portable Waybar brightness module for Omarchy.
+Переносимый модуль яркости монитора для Waybar в Omarchy.
 
-## Files
+## Файлы
 
-- `waybar/brightness/brightness-status.sh` exposes the current brightness as Waybar JSON.
-- `waybar/brightness/brightness-control.sh` increases or decreases brightness for the active backend.
-- `waybar/brightness/brightness.css` adds a small width hint and a dimmed unsupported state.
-- `install.sh` installs the module into `~/.config/waybar/` and updates Waybar config/CSS.
-- `uninstall.sh` removes the module from Waybar config/CSS and deletes the installed payload.
+- `waybar/brightness/brightness-status.sh` — выводит текущую яркость в формате JSON для Waybar
+- `waybar/brightness/brightness-control.sh` — увеличивает или уменьшает яркость через активный бэкенд
+- `waybar/brightness/brightness.css` — стили: ширина, иконка, приглушённый режим для unsupported
+- `install.sh` — устанавливает модуль в `~/.config/waybar/` и обновляет конфиг Waybar
+- `uninstall.sh` — удаляет модуль из конфига Waybar и стирает установленные файлы
 
-## Install
+## Установка
 
-Run:
+Выполните:
 
 ```bash
 ./install.sh
 ```
 
-The installer:
+Инсталлер:
 
-- copies the brightness payload into `~/.config/waybar/brightness/`
-- adds `custom/brightness` to `modules-right` before `battery`
-- appends the module definition to `~/.config/waybar/config.jsonc`
-- imports `brightness/brightness.css` from `~/.config/waybar/style.css`
-- configures scroll actions so wheel up increases brightness and wheel down decreases it
-- checks whether `ddcutil` is available and tries `omarchy-pkg-add ddcutil` when it is missing
-- tries `modprobe i2c-dev` when `modprobe` is available
-- runs `ddcutil detect --brief` when `ddcutil` is available to preflight external-monitor support
-- prints warnings to stderr if DDC preparation fails, but still completes the Waybar module install
-- is safe to run multiple times
-- calls `omarchy-restart-waybar`
+- копирует файлы модуля в `~/.config/waybar/brightness/`
+- добавляет `custom/brightness` в `modules-right` перед `battery`
+- добавляет определение модуля в `~/.config/waybar/config.jsonc`
+- подключает `brightness/brightness.css` из `~/.config/waybar/style.css`
+- настраивает scroll-действия: колесо вверх — увеличить яркость, вниз — уменьшить
+- проверяет наличие `ddcutil` и при отсутствии ставит через `omarchy-pkg-add ddcutil`
+- пытается загрузить `i2c-dev` через `modprobe`
+- запускает `ddcutil detect --brief` для проверки поддержки внешнего монитора
+- выводит предупреждения в stderr при проблемах с DDC, но завершает установку модуля
+- безопасен при повторном запуске (идемпотентный)
+- вызывает `omarchy-restart-waybar`
 
-## Dependencies
+## Зависимости
 
-- `brightnessctl` is used for backlight devices exposed through `/sys/class/backlight`.
-- `ddcutil` is used as a fallback for external displays that support DDC/CI.
-- the installer now attempts to self-heal the common DDC prerequisites (`ddcutil` package and `i2c-dev` module)
-- If both are unavailable, the module stays visible but switches to the unsupported state.
+- `brightnessctl` — используется для backlight-устройств из `/sys/class/backlight`
+- `ddcutil` — используется как fallback для внешних мониторов с поддержкой DDC/CI
+- инсталлер автоматически пытается установить недостающие компоненты (`ddcutil`, `i2c-dev`)
+- если оба метода недоступны, модуль остаётся видимым, но переходит в режим «unsupported»
 
-## Device Detection
+## Определение устройства
 
-Check what the scripts can see:
+Проверьте, что видят скрипты:
 
 ```bash
 brightnessctl --machine-readable --list
 ddcutil detect --brief
 ```
 
-Expected behavior:
+Ожидаемое поведение:
 
-- if `brightnessctl` reports a `backlight,...` entry, that device is preferred
-- otherwise the first detected DDC/CI display from `ddcutil detect --brief` is used
+- если `brightnessctl` находит устройство `backlight,...`, оно используется优先
+- иначе используется первый DDC/CI монитор из `ddcutil detect --brief`
 
-## Unsupported State
+## Состояние «unsupported»
 
-The module shows a dimmed gray appearance when it cannot read a usable brightness value.
+Модуль показывает приглушённый серый вид, когда не может прочитать яркость.
 
-That usually means one of these cases:
+Это обычно означает:
 
-- no backlight device was found
-- no DDC/CI monitor was detected
-- a monitor was detected but brightness could not be read
-- `brightnessctl` or `ddcutil` is missing from the system
+- backlight-устройство не найдено
+- DDC/CI монитор не обнаружен
+- монитор обнаружен, но яркость не удалось прочитать
+- `brightnessctl` или `ddcutil` отсутствуют в системе
 
-In this state Waybar shows the sun icon without a percentage and the module gets the `unsupported` class from the status script.
+В этом состоянии Waybar показывает иконку солнца без процентов, модуль получает класс `unsupported`.
 
-## Basic Troubleshooting
+## Диагностика проблем
 
-If the module is unavailable or stays gray:
+Если модуль недоступен или всегда серый:
 
 ```bash
 ~/.config/waybar/brightness/brightness-status.sh
@@ -76,27 +76,27 @@ brightnessctl --machine-readable --list
 ddcutil detect --brief
 ```
 
-Look for:
+Ищите:
 
-- JSON with `"class":"active"` and a percentage from `brightness-status.sh`
-- at least one `backlight` entry from `brightnessctl`
-- at least one detected display from `ddcutil`
+- JSON с `"class":"active"` и процентами от `brightness-status.sh`
+- хотя бы одну запись `backlight` от `brightnessctl`
+- хотя бы один обнаруженный дисплей от `ddcutil`
 
-If none of those appear, install the missing tool or verify that the display exposes backlight or DDC/CI brightness control.
+Если ничего не найдено — установите недостающий инструмент или убедитесь, что дисплей поддерживает backlight или DDC/CI.
 
-## Uninstall
+## Удаление
 
-Run:
+Выполните:
 
 ```bash
 ./uninstall.sh
 ```
 
-The uninstaller removes the copied files, CSS import, and `config.jsonc` entries, then calls `omarchy-restart-waybar`.
+Удаление стирает скопированные файлы, CSS-импорт и записи в `config.jsonc`, затем вызывает `omarchy-restart-waybar`.
 
-## Tests
+## Тесты
 
-Run:
+Выполните:
 
 ```bash
 ./tests/test-install.sh
