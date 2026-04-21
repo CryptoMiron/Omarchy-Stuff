@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ "$#" -eq 2 ] && [ "$1" = "detect" ] && [ "$2" = "--brief" ]; then
+  exit 0
+fi
+
+printf 'unexpected args: %s\n' "$*" >&2
+exit 64

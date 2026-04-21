@@ -12,4 +12,6 @@ AGENTS.md
 CLAUDE.md
 GEMINI.md
 
-docs/
+docs/*
+!docs/superpowers/
+!docs/superpowers/**

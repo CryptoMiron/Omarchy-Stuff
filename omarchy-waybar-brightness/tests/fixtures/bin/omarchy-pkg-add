@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+printf 'omarchy-pkg-add %s\n' "$*" >>"${WAYBAR_INSTALLER_PREP_LOG:?}"
+
+if [ "$#" -ne 1 ] || [ "$1" != 'ddcutil' ]; then
+  printf 'unexpected args: %s\n' "$*" >&2
+  exit 64
+fi
+
+if [ "${WAYBAR_INSTALLER_PKG_ADD_SHOULD_FAIL:-0}" = '1' ]; then
+  printf 'mock pkg add failure\n' >&2
+  exit 1
+fi
+
+if [ -n "${WAYBAR_INSTALLER_DDCUTIL_SOURCE:-}" ]; then
+  cp -f "$WAYBAR_INSTALLER_DDCUTIL_SOURCE" "$(dirname "$0")/ddcutil"
+  chmod +x "$(dirname "$0")/ddcutil"
+fi

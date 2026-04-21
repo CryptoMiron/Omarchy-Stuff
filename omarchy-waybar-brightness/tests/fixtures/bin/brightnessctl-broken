@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ "$#" -eq 2 ] && [ "$1" = "--machine-readable" ] && [ "$2" = "--list" ]; then
+  printf 'backlight,intel_backlight,platform\n'
+  exit 0
+fi
+
+if [ "$#" -eq 4 ] \
+  && [ "$1" = "--machine-readable" ] \
+  && [ "$2" = "--device" ] \
+  && [ "$3" = "intel_backlight" ] \
+  && [ "$4" = "info" ]; then
+  printf 'Device "intel_backlight" of class "backlight":\n'
+  printf 'Current brightness: unknown\n'
+  exit 0
+fi
+
+printf 'unexpected args: %s\n' "$*" >&2
+exit 64

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+printf 'modprobe %s\n' "$*" >>"${WAYBAR_INSTALLER_PREP_LOG:?}"
+
+if [ "$#" -ne 1 ] || [ "$1" != 'i2c-dev' ]; then
+  printf 'unexpected args: %s\n' "$*" >&2
+  exit 64
+fi
+
+if [ "${WAYBAR_INSTALLER_MODPROBE_SHOULD_FAIL:-0}" = '1' ]; then
+  printf 'mock modprobe failure\n' >&2
+  exit 1
+fi

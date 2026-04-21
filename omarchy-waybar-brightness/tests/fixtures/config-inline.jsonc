@@ -1,0 +1,6 @@
+{
+  // Waybar config fixture
+  "layer": "top",
+  "modules-left": ["hyprland/workspaces"],
+  "modules-right": ["network", "battery", "clock"]
+}

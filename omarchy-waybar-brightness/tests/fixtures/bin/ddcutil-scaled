@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ "$#" -eq 2 ] && [ "$1" = "detect" ] && [ "$2" = "--brief" ]; then
+  printf 'Display 7\n'
+  exit 0
+fi
+
+if [ "$#" -eq 4 ] \
+  && [ "$1" = "--bus" ] \
+  && [ "$2" = "7" ] \
+  && [ "$3" = "getvcp" ] \
+  && [ "$4" = "10" ]; then
+  printf 'VCP code 0x10 (Brightness): current value = 42, max value = 200\n'
+  exit 0
+fi
+
+if [ "$#" -eq 6 ] \
+  && [ "$1" = "--bus" ] \
+  && [ "$2" = "7" ] \
+  && [ "$3" = "setvcp" ] \
+  && [ "$4" = "10" ] \
+  && { [ "$5" = "+" ] || [ "$5" = "-" ]; } \
+  && [ "$6" = "10" ]; then
+  if [ -n "${WAYBAR_BRIGHTNESS_LOG:-}" ]; then
+    printf '%s\n' "$*" >>"$WAYBAR_BRIGHTNESS_LOG"
+  fi
+  exit 0
+fi
+
+printf 'unexpected args: %s\n' "$*" >&2
+exit 64

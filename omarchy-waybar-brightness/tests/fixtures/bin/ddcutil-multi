@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ "$#" -eq 2 ] && [ "$1" = "detect" ] && [ "$2" = "--brief" ]; then
+  printf 'Display 2\n'
+  printf 'Display 10\n'
+  printf 'Display 2\n'
+  exit 0
+fi
+
+if [ "$#" -eq 4 ] \
+  && [ "$1" = "--bus" ] \
+  && [ "$2" = "2" ] \
+  && [ "$3" = "getvcp" ] \
+  && [ "$4" = "10" ]; then
+  printf 'VCP code 0x10 (Brightness): current value = 55, max value = 100\n'
+  exit 0
+fi
+
+printf 'unexpected args: %s\n' "$*" >&2
+exit 64

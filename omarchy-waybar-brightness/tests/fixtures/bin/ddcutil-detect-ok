@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+printf 'ddcutil %s\n' "$*" >>"${WAYBAR_INSTALLER_PREP_LOG:?}"
+
+if [ "$#" -eq 2 ] && [ "$1" = 'detect' ] && [ "$2" = '--brief' ]; then
+  printf 'Display 3\n'
+  exit 0
+fi
+
+printf 'unexpected args: %s\n' "$*" >&2
+exit 64

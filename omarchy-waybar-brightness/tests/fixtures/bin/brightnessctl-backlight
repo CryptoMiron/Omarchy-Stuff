@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ "$#" -eq 2 ] && [ "$1" = "--machine-readable" ] && [ "$2" = "--list" ]; then
+  printf 'backlight,intel_backlight,platform\n'
+  exit 0
+fi
+
+if [ "$#" -eq 4 ] \
+  && [ "$1" = "--machine-readable" ] \
+  && [ "$2" = "--device" ] \
+  && [ "$3" = "intel_backlight" ] \
+  && [ "$4" = "info" ]; then
+  printf "Device 'intel_backlight' of class 'backlight':\n"
+  printf 'Current brightness: 7500 (73%%)\n'
+  exit 0
+fi
+
+if [ "$#" -eq 4 ] \
+  && [ "$1" = "--device" ] \
+  && [ "$2" = "intel_backlight" ] \
+  && [ "$3" = "set" ]; then
+  if [ -n "${WAYBAR_BRIGHTNESS_LOG:-}" ]; then
+    printf '%s\n' "$*" >>"$WAYBAR_BRIGHTNESS_LOG"
+  fi
+  exit 0
+fi
+
+printf 'unexpected args: %s\n' "$*" >&2
+exit 64

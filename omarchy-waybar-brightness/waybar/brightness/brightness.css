@@ -1,0 +1,9 @@
+#custom-brightness {
+  min-width: 72px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+#custom-brightness.unsupported {
+  opacity: 0.6;
+}

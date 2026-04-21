@@ -1,0 +1,19 @@
+[
+  {
+    // Primary bar fixture
+    "layer": "top",
+    "modules-left": ["hyprland/workspaces"],
+    "modules-right": [
+      "network",
+      "battery",
+      "clock"
+    ]
+  },
+  {
+    "layer": "bottom",
+    "modules-right": [
+      "tray",
+      "clock"
+    ]
+  }
+]

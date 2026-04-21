@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ "$#" -eq 2 ] && [ "$1" = "--machine-readable" ] && [ "$2" = "--list" ]; then
+  exit 0
+fi
+
+printf 'unexpected args: %s\n' "$*" >&2
+exit 64
